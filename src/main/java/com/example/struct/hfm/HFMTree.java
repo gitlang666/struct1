@@ -33,7 +33,6 @@ public class HFMTree {
             list.remove(hfmNode.rightNode);
             list.add(hfmNode);
         }
-        System.out.println(list);
         return list.get(0);
     }
 
@@ -52,7 +51,6 @@ public class HFMTree {
         getCodeTable(hfmNode);
         //编码
         coding=strToCode(bytes);
-        System.out.println("coding="+coding);
         //得到byte数组的编码
         byte[] resultB=getResultB(coding);
         return resultB;
@@ -62,13 +60,10 @@ public class HFMTree {
     public byte[] hfmDecoding(byte[] bytes,Map<Byte,String> map){
         byte[] originalCode=null;
         Map<String,Byte> deCodeMap=getDeCodeTable(map);
-        //处理编码后的byte[]得到string
+        //处理编码后的byte[]得到原始编码string
         String originalStr=getOriginalCode(bytes);
-//        System.out.println("coding="+originalStr);
         //解码数据
         originalCode=getOriginalByte(originalStr,deCodeMap);
-//        System.out.println(Arrays.toString(originalCode));
-//        System.out.println("originalCode.len="+originalCode.length);
         return originalCode;
     }
 
@@ -79,7 +74,13 @@ public class HFMTree {
             String str=originalStr.substring(i,i+count);
             while (map.get(str)==null){
                 count+=1;
-                str=originalStr.substring(i,i+count);
+                try {
+                    str=originalStr.substring(i,i+count);
+                }catch (StringIndexOutOfBoundsException e){
+                    System.out.println("索引出错");
+                    System.exit(-1);
+                }
+
             }
             list.add(map.get(str));
             i+=count;
@@ -99,10 +100,13 @@ public class HFMTree {
             if(i!=bytes.length-1){
                 b |=256;
                 var=Integer.toBinaryString(b);
-//            System.out.println("var.length="+var.length());
                 var=var.substring(var.length()-8);
             }else {
                 var=Integer.toBinaryString(b);
+                if(b<0){
+                    var=var.substring(var.length()-8);
+                }
+
             }
 
             stringBuilder.append(var);
@@ -217,55 +221,15 @@ public class HFMTree {
         root.threadNode(node,null);
     }
 
-    public  static void quick(int[] arr,int s,int e){
-        if(s<e){
-            int i=s,j=e;
-            int temp=arr[s];
-            while (i<j){
-                while (i<j && arr[j]>=temp){
-                    j--;
-                }
-                if(i<j){
-                    arr[i]=arr[j];
-                    i++;
-                }
-                while (i<j && arr[i]<temp){
-                    i++;
-                }
-                if(i<j){
-                    arr[j]=arr[i];
-                    j--;
-                }
-                arr[i]=temp;
-            }
-            quick(arr,s,i-1);
-            quick(arr,i+1,e);
-        }
-    }
-
-    public static void shellS(int[] arr){
-        for (int i=1;i<arr.length;i++){
-            int temp=arr[i];
-            int j=i;
-            for (;j>0;j--){
-                if(arr[j-1]>temp){
-                    arr[j]=arr[j-1];
-                }
-                else{
-                    break;
-                }
-            }
-            arr[j]=temp;
-        }
-    }
-
 
     public void zipfile(String path, String out) {
         try {
             FileInputStream fileInputStream=new FileInputStream(path);
             byte[] bytes=new byte[fileInputStream.available()];
+            System.out.println("orinigalCode.len="+bytes.length);
             fileInputStream.read(bytes);
             byte[] hfmCode=hfmCoding(bytes);
+            System.out.println("hfmCode.len="+hfmCode.length);
             FileOutputStream os=new FileOutputStream(out);
             ObjectOutputStream oos=new ObjectOutputStream(os);
             oos.writeObject(hfmCode);

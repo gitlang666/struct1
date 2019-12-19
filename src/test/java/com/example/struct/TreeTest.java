@@ -111,8 +111,6 @@ public class TreeTest {
         int[] arr=new int[]{5,7,13,17,25,29,4,20};
         HFMTree tree=new HFMTree(arr);
         tree.midShow();
-        HFMTree.quick(arr,0,arr.length-1);
-        System.out.println(Arrays.toString(arr));
     }
 
     @Test
@@ -130,12 +128,12 @@ public class TreeTest {
     @Test
     public void zipfile() {
         HFMTree tree=new HFMTree();
-        tree.zipfile("D:\\dqjsfile\\pdf\\timg.jpg","D:\\dqjsfile\\pdf\\tp.zip");
+        tree.zipfile("E:\\sql文件\\dqjs.sql","E:\\sql文件\\dqjs.zip");
     }
 
     @Test
     public void jyfile() {
         HFMTree tree=new HFMTree();
-        tree.jyfile("D:\\dqjsfile\\pdf\\tp.zip","D:\\dqjsfile\\pdf\\tp.jpg");
+        tree.jyfile("E:\\sql文件\\dqjs.zip","E:\\sql文件\\tp.sql");
     }
 }
