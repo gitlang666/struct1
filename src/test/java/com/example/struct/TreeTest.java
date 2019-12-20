@@ -157,11 +157,13 @@ public class TreeTest {
         tree.delete(15);
         System.out.println("height="+tree.getHeight());
         tree.midShow();
+        System.out.println();
+        tree.show();
         System.out.println("\n=========");
         tree.delete(18);
         System.out.println("height="+tree.getHeight());
         tree.midShow();
         System.out.println("\n=========");
-        tree.beforeShow();
+        tree.show();
     }
 }

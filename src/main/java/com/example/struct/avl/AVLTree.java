@@ -29,4 +29,8 @@ public class AVLTree {
     public void beforeShow(){
         this.root.beforeShow(root);
     }
+
+    public void show() {
+        this.root.show();
+    }
 }

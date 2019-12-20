@@ -1,5 +1,10 @@
 package com.example.struct.avl;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 public class Node {
     public int value;
     public Node left;
@@ -255,5 +260,26 @@ public class Node {
         System.out.print(node.value+",");
         beforeShow(node.left);
         beforeShow(node.right);
+    }
+
+    /**
+     * 将树进行按层遍历
+     */
+    public void show(){
+        //使用List充当一个队列,也可以是用Queue
+        Queue<Node> list2=new LinkedList<>();
+        ArrayList<Node> list=new ArrayList<>();
+        list.add(this);
+        while (!list.isEmpty()){
+            Node node=list.remove(0);
+            System.out.println(node.value+",");
+            if(node.left!=null){
+                list.add(node.left);
+            }
+            if(node.right!=null){
+                list.add(node.right);
+            }
+        }
+
     }
 }
