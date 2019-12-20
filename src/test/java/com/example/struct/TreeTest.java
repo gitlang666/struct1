@@ -1,5 +1,6 @@
 package com.example.struct;
 
+import com.example.struct.avl.AVLTree;
 import com.example.struct.clue.BinaryTree;
 import com.example.struct.clue.Node;
 import com.example.struct.clue.OrderTree;
@@ -135,5 +136,32 @@ public class TreeTest {
     public void jyfile() {
         HFMTree tree=new HFMTree();
         tree.jyfile("E:\\sql文件\\dqjs.zip","E:\\sql文件\\tp.sql");
+    }
+
+    @Test
+    void avlTest() {
+        int[] arr=new int[]{8,5,9,4,6,3};
+        int[] arr1=new int[]{8,5,9,4,7,6};
+        int[] arr2=new int[]{8,5,9,4,6,7};
+        int[] arr3=new int[]{8,7,13,12,15,10};
+        int[] arr4=new int[]{8,7,13,11,15,12};
+        int[] arr5=new int[]{8,7,13,11,15,18};
+        AVLTree tree=new AVLTree();
+        for (int i=0;i<arr5.length;i++){
+            com.example.struct.avl.Node node=new com.example.struct.avl.Node(arr5[i]);
+            tree.add(node);
+        }
+        System.out.println("height="+tree.getHeight());
+        tree.midShow();
+        System.out.println("\n=========");
+        tree.delete(15);
+        System.out.println("height="+tree.getHeight());
+        tree.midShow();
+        System.out.println("\n=========");
+        tree.delete(18);
+        System.out.println("height="+tree.getHeight());
+        tree.midShow();
+        System.out.println("\n=========");
+        tree.beforeShow();
     }
 }

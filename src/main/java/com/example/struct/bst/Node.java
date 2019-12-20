@@ -37,6 +37,14 @@ public class Node implements Comparable<Node> {
     }
 
     /**
+     * 得到节点的高度
+     * @return
+     */
+    public int getHeight(){
+        return Math.max(leftNode !=null?leftNode.getHeight():0,rightNode !=null?rightNode.getHeight():0)+1;
+    }
+
+    /**
      * 中序遍历这个节点
      * @param node
      */
