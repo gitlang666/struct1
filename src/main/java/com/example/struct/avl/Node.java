@@ -1,9 +1,6 @@
 package com.example.struct.avl;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Node {
     public int value;
@@ -263,7 +260,7 @@ public class Node {
     }
 
     /**
-     * 将树进行按层遍历
+     * 将树进行按层遍历,广度优先遍历
      */
     public void show(){
         //使用List充当一个队列,也可以是用Queue
@@ -280,6 +277,23 @@ public class Node {
                 list.add(node.right);
             }
         }
+    }
 
+    /**
+     * 深度优先遍历
+     */
+    public void depthFirstShow(){
+        Stack<Node> stack=new Stack<>();
+        stack.add(this);
+        while (!stack.isEmpty()){
+            Node node=stack.pop();
+            System.out.println(node.value);
+            if(node.left!=null){
+                stack.add(node.left);
+            }
+            if(node.right!=null){
+                stack.add(node.right);
+            }
+        }
     }
 }

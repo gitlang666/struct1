@@ -33,4 +33,8 @@ public class AVLTree {
     public void show() {
         this.root.show();
     }
+
+    public void depthFristShow(){
+        this.root.depthFirstShow();
+    }
 }
