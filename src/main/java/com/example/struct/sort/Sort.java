@@ -17,7 +17,7 @@ public class Sort {
         if(s<e){
             int i=s,j=e,temp=arr[i];
             while (i<j){
-                while (i<j && arr[j]>temp){
+                while (i<j && arr[j]>=temp){
                     j--;
                 }
                 if (i<j){
@@ -31,12 +31,13 @@ public class Sort {
                     arr[j]=arr[i];
                     j--;
                 }
-                arr[i]=temp;
-                quick(arr,s,i-1);
-                quick(arr,i+1,e);
             }
+            arr[i]=temp;
+            quick(arr,s,i-1);
+            quick(arr,i+1,e);
         }
     }
+
 
     public static void insert(int[] arr){
         for (int i=1;i<arr.length;i++){
