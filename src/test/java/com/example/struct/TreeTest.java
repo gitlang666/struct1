@@ -1,20 +1,26 @@
 package com.example.struct;
 
 import com.example.struct.avl.AVLTree;
+import com.example.struct.bst.BSTree;
 import com.example.struct.clue.BinaryTree;
 import com.example.struct.clue.Node;
 import com.example.struct.clue.OrderTree;
+import com.example.struct.graph.Graph;
+import com.example.struct.graph.Vertex;
+import com.example.struct.hash.HashCode;
+import com.example.struct.hash.HashTable;
 import com.example.struct.hfm.HFMTree;
+import com.example.struct.rb.*;
+import com.example.struct.recursive.Fibonacci;
 import com.example.struct.sort.Sort;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
+import javax.sound.midi.Soundbank;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 public class TreeTest {
 
@@ -139,6 +145,32 @@ public class TreeTest {
     }
 
     @Test
+    public void bstreeTest()
+    {
+        com.example.struct.bst.Node node1=new com.example.struct.bst.Node(13);
+        BSTree bsTree=new BSTree(node1);
+        com.example.struct.bst.Node node2=new com.example.struct.bst.Node(8);
+        com.example.struct.bst.Node node3=new com.example.struct.bst.Node(15);
+        com.example.struct.bst.Node node4=new com.example.struct.bst.Node(7);
+        com.example.struct.bst.Node node5=new com.example.struct.bst.Node(11);
+        com.example.struct.bst.Node node6=new com.example.struct.bst.Node(18);
+        com.example.struct.bst.Node node7=new com.example.struct.bst.Node(16);
+        bsTree.add(node2);
+        bsTree.add(node3);
+        bsTree.add(node4);
+        bsTree.add(node5);
+        bsTree.add(node6);
+        bsTree.add(node7);
+        bsTree.midShow();
+        System.out.println("=======================");
+        bsTree.imageTree();
+        bsTree.midShow();
+        System.out.println("=======================");
+        bsTree.imageTree1();
+        bsTree.midShow();
+    }
+
+    @Test
     void avlTest() {
         int[] arr=new int[]{8,5,9,4,6,3};
         int[] arr1=new int[]{8,5,9,4,7,6};
@@ -165,5 +197,106 @@ public class TreeTest {
         tree.midShow();
         System.out.println("\n=========");
         tree.show();
+        tree.depthFristShow();
     }
+
+    @Test
+    void rbtest() {
+        int[] arr5=new int[]{8,7,13,11,15,18,24,25,26,27,28,29,30,31,32};
+        RBTree tree=new RBTree();
+        for (int i=0;i<arr5.length;i++){
+            RBNode node=new RBNode(arr5[i]);
+            tree.add(node);
+        }
+
+        tree.bfsShow();
+    }
+
+    @Test
+    void myrbtest() {
+        MyRBTree<Key, Data> myRBTree = new MyRBTree<>();
+        int[] arr5=new int[]{8,7,13,11,15,18,24,25,26,27,28,29,30,31,32};
+        Key key=null;
+        Data data=null;
+        for (int i = 0; i < arr5.length; i++) {
+            if(i==1){
+                key=new Key(arr5[i]);
+                data=new Data(""+arr5[i]);
+                myRBTree.insert(key,data);
+            }else {
+                myRBTree.insert(new Key(arr5[i]),new Data(""+arr5[i]));
+            }
+
+        }
+//        myRBTree.printTreeLevel();
+        myRBTree.delete(key);
+    }
+
+    @Test
+    void testhash() {
+        System.out.println(HashCode.hash("langgggggggggggggggggg"));
+        System.out.println(108*31+97*31+110*31+103*31);
+        HashTable<com.example.struct.hash.Node> hashtable=new HashTable<>();
+        int[] arr=new int[]{15,21,23,25,35,45,65,75,12,33,43,11};
+        for (int i = 0; i < arr.length; i++) {
+            com.example.struct.hash.Node node1=new com.example.struct.hash.Node(arr[i]);
+            hashtable.add(node1);
+        }
+        hashtable.show();
+        com.example.struct.hash.Node node=hashtable.get(35);
+        hashtable.delete(node);
+        hashtable.show();
+    }
+
+    @Test
+    void testGraph() {
+        Vertex v1=new Vertex("A");
+        Vertex v2=new Vertex("B");
+        Vertex v3=new Vertex("C");
+        Vertex v4=new Vertex("D");
+        Vertex v5=new Vertex("E");
+        Vertex v6=new Vertex("F");
+        Vertex v7=new Vertex("G");
+        Graph graph=new Graph(7);
+        graph.addVertex(v1);
+        graph.addVertex(v2);
+        graph.addVertex(v3);
+        graph.addVertex(v4);
+        graph.addVertex(v5);
+        graph.addVertex(v6);
+        graph.addVertex(v7);
+        graph.add("A","B",5);
+        graph.add("A","C",7);
+        graph.add("A","G",2);
+        graph.add("B","G",3);
+        graph.add("B","D",9);
+        graph.add("C","E",8);
+        graph.add("D","F",4);
+        graph.add("E","G",4);
+        graph.add("E","F",5);
+        graph.add("F","G",6);
+        for (int[] i:graph.adMatrix){
+            System.out.println(Arrays.toString(i));
+        }
+
+//        graph.beradthFirst(0);
+//        graph.depthFirst(0);
+//        graph.mixPath("A","D");
+//        graph.allPath("A","F");
+        graph.minTree("A");
+    }
+
+    @Test
+    void testfibonacci() {
+        long s1=System.currentTimeMillis();
+        System.out.println(Fibonacci.method2(48));
+        long e1=System.currentTimeMillis();
+        System.out.println("time="+(e1-s1));
+        long s2=System.currentTimeMillis();
+        System.out.println(Fibonacci.method1(48));
+        long e2=System.currentTimeMillis();
+        System.out.println("time="+(e2-s2));
+    }
+
+
 }

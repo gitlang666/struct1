@@ -7,18 +7,24 @@ import java.io.OutputStream;
 import java.util.*;
 
 public class Graph {
+    //存放顶点
     private List<Vertex> vertexList=new ArrayList<>();
     //邻接矩阵
     public int[][] adMatrix;
+    //顶点个数
     private int size;
 
     public Graph(int size) {
         this.size=size;
         this.adMatrix=new int[size][size];
         this.flag=new int[size];
+        this.minFalg=new int[size];
     }
 
-
+    /**
+     * 将顶点加入
+     * @param vertex
+     */
     public void addVertex(Vertex vertex){
         if(vertex==null) return;
         if(size>vertexList.size()){
@@ -29,6 +35,12 @@ public class Graph {
 
     }
 
+    /**
+     * 将边加入邻接矩阵
+     * @param one 点1
+     * @param two 点2
+     * @param w 权值
+     */
     public void add(String one,String two,int w){
         int h=-1,v=-1;
         for (int i = 0; i < vertexList.size(); i++) {
@@ -49,22 +61,25 @@ public class Graph {
 
     }
 
+    //可以用来表示找过的顶点
     private int[] flag;
 
     /***
      * 广度优先
-     * @param s
+     * @param s 开始点的位置
      */
     public void beradthFirst(int s){
         if(s>size){
             return;
         }
+        //广度优先遍历离s近的点，使用队列
         Queue<Integer> queue=new LinkedList();
         queue.add(s);
         flag[s]=1;
         while (!queue.isEmpty()){
             int k=queue.poll();
             System.out.print(vertexList.get(k).getValue()+"  ");
+            //找到能连通的点取出，并标记已经取出
             for (int i = 0; i <adMatrix[k].length ; i++) {
                 if(adMatrix[k][i]!=0 && flag[i]==0){
                     queue.add(i);
@@ -130,8 +145,8 @@ public class Graph {
 
 
     /**
-     * 深度优先
-     * @param s
+     * 深度优先，先遍历顶点的后顶点，后判断同层顶点。
+     * @param s 开始的点
      */
     public void depthFirst(int s){
         if(s>size){
@@ -158,11 +173,12 @@ public class Graph {
     List<String> strings=new ArrayList<>();
 
     /**
-     * 深度优先
+     * 深度优先从s到e的所有路径
      * @param s
      * @param e
      */
     public void allPath(String s,String e){
+        //得到起始点的标号
         for (int i = 0; i < vertexList.size(); i++) {
             if (vertexList.get(i).getValue().equals(s)){
                 stack.add(i);
@@ -172,6 +188,7 @@ public class Graph {
         allPath(sb,0,e);
         System.out.println(strings);
         Map<String ,Integer> wMap=new HashMap<>();
+        //计算权值
         for (String string : strings) {
             string=string.substring(0,string.length()-1);
             int w=0;
@@ -205,30 +222,85 @@ public class Graph {
             return;
         }else if(!stack.isEmpty()){
             int k=stack.pop();
+            //拼接之前的路径
             StringBuilder stringBuilder2=new StringBuilder(stringBuilder1);
+            //判断是否走了重复路径
             if(stringBuilder2.indexOf(vertexList.get(k).getValue())==-1){
                 stringBuilder2.append(vertexList.get(k).getValue()+">");
             }else {
                 return;
             }
+            //找到了e点
             if(vertexList.get(k).getValue().equals(e)){
                 strings.add(stringBuilder2.toString());
                 return;
             }
             int j=0;
+            //将连通点放入栈中
             for (int i = 0; i < adMatrix[k].length; i++) {
                 if(adMatrix[k][i]!=0 && count<size ){
                     stack.add(i);
                     j++;
                 }
             }
+            //找点后面的连通点，先向远处找。
             for (int i = 0; i < j; i++) {
                 allPath(stringBuilder2,count,e);
             }
 
         }
 
+    }
 
+    //用来存放边
+    public List<Connected> connList=new ArrayList<>();
+    //存放已经访问的点
+    private int[] minFalg ;
+    /**
+     * 得到value点最小生成树prim
+     * @param value
+     */
+    public void minTree(String value){
+        int index=getindex(value);
+        if(index==-1){
+            return;
+        }
+        //放入value点
+        Connected conn=new Connected(vertexList.get(index),vertexList.get(index),0,index);
+        connList.add(conn);
+        minFalg[index]=1;
+        for(int k=0;k<size-1;k++){
+            int l=-1,r=-1,temp=0;
+            //找出没有在connlist中出现过的点与未出现过的点的最小权值
+            for (int in=0;in<connList.size();in++){
+                for(int i=0;i<vertexList.size();i++){
+                    if(adMatrix[connList.get(in).index][i]!=0 && minFalg[i]!=1 && (temp==0 || temp>adMatrix[connList.get(in).index][i])){
+                        l=in;
+                        r=i;
+                        temp=adMatrix[connList.get(in).index][i];
+                    }
+                }
+            }
+            minFalg[r]=1;
+            connList.add(new Connected(connList.get(l).v2,vertexList.get(r),temp,r));
+        }
+        System.out.println(connList.toString());
+
+    }
+
+    /**
+     * 根据名称得到节点的标号
+     * @param value
+     * @return
+     */
+    private int getindex(String value){
+        int index=-1;
+        for (int i = 0; i < vertexList.size(); i++) {
+            if (vertexList.get(i).getValue().equals(value)) {
+                index=i;
+            }
+        }
+        return index;
     }
 
 
